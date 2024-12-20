@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الديون - نظام ERP</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #28a745 !important;
+        }
+
+        .dashboard-header {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .table thead th {
+            background-color: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">system Boharat.eg</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">لوحة التحكم</a></li>
+                <li class="nav-item"><a class="nav-link" href="sales_management.html">إدارة المبيعات</a></li>
+                <li class="nav-item"><a class="nav-link" href="clients_management.html">إدارة العملاء</a></li>
+                <li class="nav-item"><a class="nav-link" href="inventory_management.html">إدارة المخزون</a></li>
+                <li class="nav-item"><a class="nav-link active" href="debts_management.html">إدارة الديون</a></li>
+                <li class="nav-item"><a class="nav-link" href="shipping_management.html">إدارة شركات الشحن</a></li>
+                <li class="nav-item"><a class="nav-link" href="settings.html">الإعدادات</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mt-5">
+        <div class="dashboard-header">
+            <h3>إدارة الديون</h3>
+            <p>هنا يمكنك تتبع الديون والمدفوعات.</p>
+        </div>
+
+        <!-- Debts Table -->
+        <div class="mt-4">
+            <button class="btn btn-success mb-3" data-toggle="modal" data-target="#addEditModal">إضافة دين جديد</button>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>اسم العميل</th>
+                        <th>المبلغ المستحق</th>
+                        <th>المبلغ المدفوع</th>
+                        <th>الرصيد المتبقي</th>
+                        <th>تاريخ آخر دفع</th>
+                        <th>إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="debtsTable">
+                    <tr>
+                        <td>1</td>
+                        <td>محمد أحمد</td>
+                        <td>1000 جنيه</td>
+                        <td>600 جنيه</td>
+                        <td>400 جنيه</td>
+                        <td>2024-06-15</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm edit-btn" data-id="1">تعديل</button>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="1">حذف</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal fade" id="addEditModal" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addEditModalLabel">إضافة / تعديل دين</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="debtsForm">
+                        <input type="hidden" id="debtId">
+                        <div class="form-group">
+                            <label for="clientName">اسم العميل</label>
+                            <input type="text" class="form-control" id="clientName" placeholder="اسم العميل">
+                        </div>
+                        <div class="form-group">
+                            <label for="amountDue">المبلغ المستحق</label>
+                            <input type="number" class="form-control" id="amountDue" placeholder="المبلغ المستحق">
+                        </div>
+                        <div class="form-group">
+                            <label for="amountPaid">المبلغ المدفوع</label>
+                            <input type="number" class="form-control" id="amountPaid" placeholder="المبلغ المدفوع">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastPaymentDate">تاريخ آخر دفع</label>
+                            <input type="date" class="form-control" id="lastPaymentDate">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                    <button type="button" class="btn btn-primary" id="saveDebt">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center mt-5 p-3">
+        <p>&copy; 2024 شركة بهارات | جميع الحقوق محفوظة 👨‍💻​Created by Marwan El Amer</p>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            let editingDebt = null;
+
+            $("#saveDebt").click(function () {
+                const id = $("#debtId").val();
+                const name = $("#clientName").val();
+                const due = $("#amountDue").val();
+                const paid = $("#amountPaid").val();
+                const date = $("#lastPaymentDate").val();
+                const remaining = due - paid;
+
+                if (editingDebt) {
+                    const row = $(`#debtsTable [data-id="${id}"]`).closest("tr");
+                    row.find("td:nth-child(2)").text(name);
+                    row.find("td:nth-child(3)").text(due + " جنيه");
+                    row.find("td:nth-child(4)").text(paid + " جنيه");
+                    row.find("td:nth-child(5)").text(remaining + " جنيه");
+                    row.find("td:nth-child(6)").text(date);
+                } else {
+                    const newId = Date.now();
+                    const newRow = `<tr>
+                        <td>${newId}</td>
+                        <td>${name}</td>
+                        <td>${due} جنيه</td>
+                        <td>${paid} جنيه</td>
+                        <td>${remaining} جنيه</td>
+                        <td>${date}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm edit-btn" data-id="${newId}">تعديل</button>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="${newId}">حذف</button>
+                        </td>
+                    </tr>`;
+                    $("#debtsTable").append(newRow);
+                }
+
+                $("#addEditModal").modal("hide");
+            });
+
+            $(document).on("click", ".delete-btn", function () {
+                $(this).closest("tr").remove();
+            });
+
+            $(document).on("click", ".edit-btn", function () {
+                editingDebt = true;
+                const row = $(this).closest("tr");
+                const id = $(this).data("id");
+                $("#debtId").val(id);
+                $("#clientName").val(row.find("td:nth-child(2)").text());
+                $("#amountDue").val(row.find("td:nth-child(3)").text().replace(" جنيه", ""));
+                $("#amountPaid").val(row.find("td:nth-child(4)").text().replace(" جنيه", ""));
+                $("#lastPaymentDate").val(row.find("td:nth-child(6)").text());
+                $("#addEditModal").modal("show");
+            });
+        });
+    </script>
+</body>
+
+</html>

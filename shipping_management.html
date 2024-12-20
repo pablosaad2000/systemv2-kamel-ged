@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة شركات الشحن - نظام ERP</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #28a745 !important;
+        }
+
+        .dashboard-header {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .table thead th {
+            background-color: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">system Boharat.eg</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">لوحة التحكم</a></li>
+                <li class="nav-item"><a class="nav-link" href="sales_management.html">إدارة المبيعات</a></li>
+                <li class="nav-item"><a class="nav-link" href="clients_management.html">إدارة العملاء</a></li>
+                <li class="nav-item"><a class="nav-link" href="inventory_management.html">إدارة المخزون</a></li>
+                <li class="nav-item"><a class="nav-link" href="debts_management.html">إدارة الديون</a></li>
+                <li class="nav-item"><a class="nav-link active" href="shipping_management.html">إدارة شركات الشحن</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="settings.html">الإعدادات</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mt-5">
+        <div class="dashboard-header">
+            <h3>إدارة شركات الشحن</h3>
+            <p>هنا يمكنك إدارة وتتبع شركات الشحن.</p>
+        </div>
+
+        <!-- Shipping Companies Table -->
+        <div class="mt-4">
+            <button class="btn btn-success mb-3" data-toggle="modal" data-target="#addEditModal">إضافة شركة شحن
+                جديدة</button>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>اسم شركة الشحن</th>
+                        <th>رقم الهاتف</th>
+                        <th>الحالة</th>
+                        <th>عدد الطلبات</th>
+                        <th>إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="shippingTable">
+                    <tr>
+                        <td>1</td>
+                        <td>شركة الشحن A</td>
+                        <td>01012345678</td>
+                        <td class="text-success">نشطة</td>
+                        <td>25</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm edit-btn" data-id="1">تعديل</button>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="1">حذف</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal fade" id="addEditModal" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addEditModalLabel">إضافة / تعديل شركة شحن</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="shippingForm">
+                        <input type="hidden" id="shippingId">
+                        <div class="form-group">
+                            <label for="companyName">اسم شركة الشحن</label>
+                            <input type="text" class="form-control" id="companyName" placeholder="اسم شركة الشحن">
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">رقم الهاتف</label>
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="رقم الهاتف">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">الحالة</label>
+                            <select class="form-control" id="status">
+                                <option value="نشطة">نشطة</option>
+                                <option value="تحت الصيانة">تحت الصيانة</option>
+                                <option value="متوقفة">متوقفة</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="orderCount">عدد الطلبات</label>
+                            <input type="number" class="form-control" id="orderCount" placeholder="عدد الطلبات">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                    <button type="button" class="btn btn-primary" id="saveCompany">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center mt-5 p-3">
+        <p>&copy; 2024 شركة بهارات | جميع الحقوق محفوظة 👨‍💻​Created by Marwan El Amer</p>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            let editingCompany = null;
+
+            $("#saveCompany").click(function () {
+                const id = $("#shippingId").val();
+                const name = $("#companyName").val();
+                const phone = $("#phoneNumber").val();
+                const status = $("#status").val();
+                const orders = $("#orderCount").val();
+
+                if (editingCompany) {
+                    const row = $(`#shippingTable [data-id="${id}"]`).closest("tr");
+                    row.find("td:nth-child(2)").text(name);
+                    row.find("td:nth-child(3)").text(phone);
+                    row.find("td:nth-child(4)").text(status);
+                    row.find("td:nth-child(5)").text(orders);
+                } else {
+                    const newId = Date.now();
+                    const newRow = `<tr>
+                        <td>${newId}</td>
+                        <td>${name}</td>
+                        <td>${phone}</td>
+                        <td>${status}</td>
+                        <td>${orders}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm edit-btn" data-id="${newId}">تعديل</button>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="${newId}">حذف</button>
+                        </td>
+                    </tr>`;
+                    $("#shippingTable").append(newRow);
+                }
+
+                $("#addEditModal").modal("hide");
+            });
+
+            $(document).on("click", ".delete-btn", function () {
+                $(this).closest("tr").remove();
+            });
+
+            $(document).on("click", ".edit-btn", function () {
+                editingCompany = true;
+                const row = $(this).closest("tr");
+                const id = $(this).data("id");
+                $("#shippingId").val(id);
+                $("#companyName").val(row.find("td:nth-child(2)").text());
+                $("#phoneNumber").val(row.find("td:nth-child(3)").text());
+                $("#status").val(row.find("td:nth-child(4)").text());
+                $("#orderCount").val(row.find("td:nth-child(5)").text());
+                $("#addEditModal").modal("show");
+            });
+        });
+    </script>
+</body>
+
+</html>
